@@ -7,40 +7,515 @@
     <meta name="keywords" content="اکسپرت, اندیکاتور, سوپرترند, اکسپرت سوپرترند, اکسپرت فارکس فیوری, اکسپرت فیوری, اکسپرت سودآور, اکسپرت پرسود, برنامه متاتریدر, برنامه نویسی ام کیو ال 5, mq5, mq4, metatrader5, forex fury, super trend, forexfury, supertrend, ربات معاملاتی">
     <title>فروش محصولات SuperTrend برای MT5</title>
     <link rel="icon" type="image/x-icon" href="/logo.ico">
-    <style>
-        /* تمام استایل‌های قبلی بدون تغییر */
-        body{font-family:Arial,sans-serif;margin:0;padding:0;background:#FFF;color:#333;min-height:100vh;direction:ltr;text-align:left}
-        .lang-switcher{position:fixed;top:10px;right:10px;z-index:1000;background:#4CAF50;color:white;border:none;padding:6px 8px;border-radius:10px;cursor:pointer;font-size:12px;max-width:52px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(0,0,0,0.25);transition:all .3s}
-        .lang-switcher:hover{background:#45a049;transform:scale(1.08)}
-        .lang-switcher img{width:26px;height:18px;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.4)}
-        .lang-switcher span{font-weight:bold;font-size:10px}
-        header{position:relative;height:200px;overflow:hidden;text-align:center;padding-top:80px;color:#fff}
-        #bgVideo{position:absolute;top:0;right:0;width:100%;height:100%;object-fit:cover;z-index:-1}
-        header h1{font-size:1.8em;text-shadow:2px 2px 4px rgba(0,0,0,0.7);margin:0;color:#4CAF50;position:relative;z-index:1}
-        header p{font-size:1.2em;text-shadow:1px 1px 3px rgba(0,0,0,0.7);color:#FFC107;margin:10px 15px;position:relative;z-index:1}
-        .container{max-width:100%;margin:10px auto;padding:10px;background:#FFF;border-radius:10px;box-sizing:border-box;text-align:center}
-        .product{background:#f9f9f9;padding:15px;margin:10px 15px;border-radius:8px;text-align:center;border:1px solid #ddd}
-        form{margin:15px;padding:15px;background:#f9f9f9;border-radius:8px;border:1px solid #ddd;display:none;flex-direction:column;gap:10px}
-        #paymentForm,#resetForm{display:none}
-        input,select,button{padding:10px;margin:5px 0;width:100%;max-width:100%;box-sizing:border-box;border:1px solid #ccc;border-radius:5px;font-size:16px}
-        button{background:#4CAF50;color:white;cursor:pointer;border:none;border-radius:5px}
-        button:hover{background:#45a049}
-        .container button{padding:10px 20px;font-size:16px;background:#0066cc;color:white;border:none;border-radius:5px}
-        img{max-width:100%;height:auto;border-radius:5px;display:block;margin:10px auto}
-        #result{margin:10px 15px;padding:10px;border:1px solid #ddd;border-radius:5px}
-        h2,h3,p,a{text-align:center;margin:10px auto}
-        h2{line-height:1.5}p{line-height:1.5}
-        a{line-height:1.8;display:block;color:#0066cc;text-decoration:none}
-        a:hover{text-decoration:underline}
-        #copyText,#copyCardText{cursor:pointer;border:1px solid #ccc;padding:10px;margin:10px auto;border-radius:5px;width:fit-content}
-        footer{background:#f9fafb;padding:15px 20px;text-align:center;border-top:1px solid #e5e7eb;box-shadow:0 -2px 4px rgba(0,0,0,0.1);font-size:14px;color:#374151;margin-top:20px}
-        .download-button{display:inline-block;padding:10px 20px;margin:10px;background:#1d4ed8;color:white;text-decoration:none;border-radius:5px;font-size:14px;transition:.3s}
-        .download-button:hover{background:#1e40af}
-        .toast{position:fixed;top:20px;right:20px;min-width:250px;padding:12px 16px;border-radius:5px;color:white;font-weight:bold;z-index:1001;transform:translateX(300px);transition:.3s}
-        .toast.show{transform:translateX(0)}
-        .toast.success{background:#4CAF50}.toast.error{background:#f44336}.toast.loading{background:#FFC107}
-        @media(min-width:768px){header{height:300px;padding-top:120px}header h1{font-size:2.5em}header p{font-size:3em}.container{max-width:750px;padding:20px}}
-        @media(min-width:1024px){.container{max-width:1200px}header h1{font-size:2em}header p{font-size:2em}}
+      <style>
+        /* Mobile-first CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+            color: #333;
+            min-height: 100vh;
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* دکمه تعویض زبان با پرچم و متن زیر آن - کاملاً درست */
+        .lang-switcher {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            max-width: 52px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+        }
+        .lang-switcher:hover { background: #45a049; transform: scale(1.08); }
+        .lang-switcher img {
+            width: 26px;
+            height: 18px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+        .lang-switcher span {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            text-align: center;
+            padding-top: 80px;
+            color: #fff;
+        }
+
+        #bgVideo {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        header h1 {
+            font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin: 0;
+            color: #4CAF50;
+            position: relative;
+            z-index: 1;
+        }
+
+        header p {
+            font-size: 1.2em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            color: #FFC107;
+            margin: 10px 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 10px auto;
+            padding: 10px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .product {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        form {
+            margin: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #paymentForm, #resetForm {
+            display: none;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            display: block;
+            margin: 10px auto;
+        }
+
+        #result {
+            margin: 10px 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2, h3, p, a {
+            text-align: center;
+            margin: 10px auto;
+        }
+
+        h2 {
+            line-height: 1.5;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+
+        a {
+            line-height: 1.8;
+            display: block;
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #copyText, #copyCardText {
+            cursor: pointer;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 5px;
+            width: fit-content;
+        }
+
+        footer {
+            background-color: #f9fafb;
+            padding: 15px 20px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #374151;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        footer p {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        footer a {
+            color: #1d4ed8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        .separator {
+            margin: 0 10px;
+            color: #9ca3af;
+        }
+
+        @media (max-width: 600px) {
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+
+            .footer-container {
+                flex-wrap: nowrap;
+            }
+
+            .separator {
+                margin: 0 5px;
+            }
+        }
+        .separator {
+            margin: 0 10px;
+            color: #9ca3af;
+        }
+        .margin-right, .margin-left, .relative-right, .relative-left, .transform-right, .transform-left {
+            margin-right: 0;
+            margin-left: 0;
+            position: static;
+            transform: none;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                height: 300px;
+                padding-top: 120px;
+            }
+
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            header p {
+                font-size: 3em;
+            }
+
+            .container {
+                max-width: 750px;
+                padding: 20px;
+            }
+
+            .product {
+                margin: 10px auto;
+                max-width: 600px;
+            }
+
+            form {
+                max-width: 500px;
+                margin: 20px auto;
+            }
+
+            input, select, button {
+                max-width: 300px;
+                font-size: 18px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1200px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 2em;
+            }
+        }
+        .download-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #1d4ed8;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #1e40af;
+        }
+
+        .video-container {
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+        }
+
+        video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview {
+            cursor: pointer;
+            max-width: 300px;
+            margin: 10px;
+        }
+
+        .image-preview {
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-preview {
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .images-container, .videos-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.95);
+            padding: 0;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 95%;
+            max-width: 95vw;
+            height: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            cursor: grab;
+        }
+
+        .modal-content:active {
+            cursor: grabbing;
+        }
+
+        .modal-content.zoomed {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 10001;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .caption {
+            font-size: 14px;
+            margin-top: 5px;
+            color: #555;
+            text-align: center;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 250px;
+            padding: 12px 16px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 1001;
+            transform: translateX(300px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.loading {
+            background-color: #FFC107;
+        }
+
+        .toast.success {
+            background-color: #4CAF50;
+        }
+
+        .toast.error {
+            background-color: #f44336;
+        }
+
+        .payment-method {
+            display: flex;
+            gap: 10px;
+        }
+
+        .payment-method input[type="radio"] {
+            width: auto;
+        }
+
+        .payment-method label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #trxDetails {
+            display: block;
+        }
+
+        #cardCopySection {
+            display: none;
+        }
+
+        #cardDetails {
+            display: none;
+        }
+
+        .modal:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
@@ -110,8 +585,69 @@
         <button type="submit" data-fa="پس از پرداخت و انتخاب محصول و وارد کردن شماره اکانت کلیک کنید" data-en="Submit After Payment">Submit After Payment</button>
         <div id="result"></div>
     </form>
+    <h2 data-fa="نمودار عملکرد محصولات در محیط بک تست پلتفرم متاتریدر" data-en="Product Performance Charts in MT5 Backtest">Product Performance Charts in MT5 Backtest</h2>
 
-    <!-- بقیه محتوا (تصاویر، ویدیوها، دانلودها و ...) بدون تغییر -->
+    <div class="images-container">
+        <div>
+            <img src="/profit_graph.png" alt="Profit Graph" class="preview image-preview" onclick="openFullScreenModal('/profit_graph.png')" style="cursor: zoom-in;">
+           <p class="caption" data-fa=" بکتست اکسپرت فارکس فیوری با سه ملیون دلار سود از 100 دلار " data-en="forex Fury Expert Backtests 100$ to 3.000.000$">forex Fury Expert Backtests 100$ to 3.000.000$</p>        </div>
+        <div>
+            <img src="/indicator_chart.png" alt="Indicator Chart" class="preview image-preview" onclick="openFullScreenModal('/indicator_chart.png')" style="cursor: zoom-in;">
+           <p class="caption" data-fa="داشبورد سوپرترند معاملات دستی و اتوماتیک در چارت" data-en="Doshboard for Trade Manual & Automatic in Chart">Doshboard for Trade Manual & Automatic in Chart</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 data-fa="نمایش ویدیوهای محصولات" data-en="Product Video Demos">Product Video Demos</h2>
+        <div class="videos-container">
+ <div>
+                <video src="/ForexFuryPro.webm" class="preview video-preview" controls autoplay muted loop poster="" onclick="openVideoModal('/ForexFuryPro.webm')" style="cursor: zoom-in;">
+                    مرورگر شما از ویدیو پشتیبانی نمی‌کند.
+                </video>
+               <p class="caption" data-fa=" اکسپرت معاملات اتوماتیک فارکس فیوری پرو " data-en="Forex  Fury  Pro Expert">Forex  Fury  Pro Expert</p>
+            </div>
+            <div>
+                <video src="/supertrend.webm" class="preview video-preview" controls autoplay muted loop poster="" onclick="openVideoModal('/supertrend.webm')" style="cursor: zoom-in;">
+                    مرورگر شما از ویدیو پشتیبانی نمی‌کند.
+                </video>
+                               <p class="caption" data-fa="اکسپرت یا ربات معاملاتی اتوماتیک سوپرترند" data-en="Expert (Robat) SuperTrend  Auto Trade">Expert (Robat) SuperTrend  Auto Trade</p>
+            </div>
+            <div>
+                <video src="/EA&EM-SuperTrend&Footprint.webm" class="preview video-preview" controls autoplay muted loop poster="" onclick="openVideoModal('/EA&EM-SuperTrend&Footprint.webm')" style="cursor: zoom-in;">
+                    مرورگر شما از ویدیو پشتیبانی نمی‌کند.
+                </video>
+                <p class="caption" data-fa="اکسپرت اتوماتیک و دستی معاملات سوپرترند و فوت پرینت " data-en="EA&EM-SuperTrend&Footprint">EA&EM-SuperTrend&Footprint</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 data-fa="دانلود فایل‌ها" data-en="Download Files">Download Files</h2>
+    <div class="container">
+       <a href="/EA&EM-SuperTrend&Footprint.ex5" download class="download-button" data-fa="ربات معاملات دستی و اتوماتیک " data-en="EA&EM-SuperTrend&Footprint">EA&EM-SuperTrend&Footprint</a>
+        <a href="/SuperTrend_EA.ex5" download class="download-button" data-fa="ربات سوپرترند" data-en="Expert Super Trend">Expert Super Trend</a>
+        <a href="/ForexFuryPro.ex5" download class="download-button" data-fa="ربات فارکس فیوری" data-en="Expert Forex Fury">Expert Forex Fury</a>
+    </div>
+    <div class="container">
+        <button onclick="window.open('https://t.me/Mq5_EA_bot','_blank')" data-fa="ورود به لینک تلگرام برای خرید" data-en="Enter Telegram Link for Purchase">Enter Telegram Link for Purchase</button>
+    </div>
+
+    <div class="container">
+        <a href="contact.html" data-fa="تماس با ما" data-en="Contact Us" style="display: inline-block; padding: 10px 20px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 5px; font-size: 16px;">Contact Us</a>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">×</span>
+        <img class="modal-content" id="imgModal">
+        <video class="modal-content" id="videoModal" controls style="display:none;"></video>
+    </div>
+
+    <div id="toast"></div>
+
+    <footer>
+        <div class="footer-container">
+            <p data-fa="© All rights reserved K_M 2025 | info@tsgcoltd.ir" data-en="© All rights reserved K_M 2025 | info@tsgcoltd.ir">© All rights reserved K_M 2025 <span class="separator">|</span> <a href="/cdn-cgi/l/email-protection#c1a8afa7ae81b5b2a6a2aeadb5a5efa8b3"><span class="__cf_email__" data-cfemail="3a53545c557a4e495d5955564e5e145348">[email&#160;protected]</span></a></p>
+        </div>
+    </footer>
 
     <script>
         let currentLang = localStorage.getItem('lang') || 'en';
@@ -294,3 +830,4 @@
     </script>
 </body>
 </html>
+
