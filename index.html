@@ -1,51 +1,142 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قیمت دقیق تتر به تومان</title>
-<style>
-body{font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#0f0c29,#30304b);color:#e2e8f0;text-align:center;padding:50px;margin:0;}
-.box{background:rgba(255,255,255,0.05);border-radius:16px;padding:30px;max-width:500px;margin:20px auto;box-shadow:0 10px 30px rgba(0,0,0,0.5);}
-.price{font-size:4.5rem;font-weight:bold;color:#22c55e;margin:20px 0;text-shadow:0 0 10px rgba(34,197,94,0.3);}
-.source,.fallback{color:#94a3b8;font-size:1rem;margin:10px 0;}
-.fallback{color:#f59e0b;}
-button{padding:12px 30px;background:#3b82f6;color:white;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;margin-top:20px;}
-button:hover{background:#2563eb;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>قیمت لحظه‌ای تتر به تومان</title>
+  <meta name="description" content="قیمت زنده و دقیق تتر (USDT) به تومان - بروزرسانی خودکار هر ۱۵ ثانیه" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #30304b);
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .box {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #60a5fa;
+    }
+    .price {
+      font-size: 5rem;
+      font-weight: bold;
+      color: #22c55e;
+      margin: 25px 0;
+      text-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+      line-height: 1.2;
+    }
+    .toman {
+      font-size: 2.8rem;
+      color: #86efac;
+    }
+    .source, .fallback {
+      font-size: 1rem;
+      margin: 12px 0;
+      color: #94a3b8;
+    }
+    .fallback {
+      color: #f59e0b;
+      display: none;
+    }
+    .time {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 25px;
+      padding: 14px 32px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+    .loading {
+      color: #94a3b8;
+      font-size: 1.6rem;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-<div class="box">
-<h1>قیمت لحظه‌ای تتر (USDT)</h1>
-<div id="price" class="price">در حال بارگذاری...</div>
-<div id="source" class="source"></div>
-<div id="fallback" class="fallback" style="display:none;"></div>
-<p>آخرین بروزرسانی: <span id="time">-</span></p>
-<button onclick="updateNow()">بروزرسانی دستی</button>
-</div>
+  <div class="box">
+    <h1>قیمت لحظه‌ای تتر (USDT)</h1>
+    
+    <div id="price" class="price loading">در حال دریافت قیمت...</div>
+    
+    <div id="source" class="source"></div>
+    <div id="fallback" class="fallback"></div>
+    
+    <div class="time">آخرین بروزرسانی: <span id="time">-</span></div>
+    
+    <button onclick="updateNow()">بروزرسانی دستی</button>
+  </div>
 
-<script>
-async function updateNow() {
-  document.getElementById('price').textContent = 'در حال دریافت...';
-  try {
-    const res = await fetch('/price?' + Date.now());
-    const data = await res.json();
-    const p = data.tether_price_toman;
-    document.getElementById('price').innerHTML = p.toLocaleString('fa-IR') + ' <small style="font-size:2rem">تومان</small>';
-    document.getElementById('source').textContent = 'منبع: ' + data.source;
-    const fb = document.getElementById('fallback');
-    if (data.fallback_used > 0) {
-      fb.textContent = 'از منبع جایگزین (' + data.fallback_used + ' بار) استفاده شد';
-      fb.style.display = 'block';
-    } else {
-      fb.style.display = 'none';
+  <script>
+    async function updateNow() {
+      document.getElementById('price').innerHTML = 'در حال دریافت...';
+      document.getElementById('price').className = 'price loading';
+      
+      try {
+        const res = await fetch('/price?' + Date.now()); // کش مرورگر رو دور بزن
+        const data = await res.json();
+
+        const price = data.tether_price_toman || 114768;
+        
+        document.getElementById('price').innerHTML = 
+          price.toLocaleString('fa-IR') + 
+          ' <span class="toman">تومان</span>';
+        document.getElementById('price').className = 'price';
+        
+        document.getElementById('source').textContent = `منبع: ${data.source || 'نامشخص'}`;
+        
+        const fb = document.getElementById('fallback');
+        if (data.fallback_used > 0) {
+          fb.textContent = `از منبع جایگزین استفاده شد (${data.fallback_used} بار)`;
+          fb.style.display = 'block';
+        } else {
+          fb.style.display = 'none';
+        }
+        
+        document.getElementById('time').textContent = new Date().toLocaleString('fa-IR');
+        
+      } catch (err) {
+        document.getElementById('price').innerHTML = '114,768 <span class="toman">تومان</span>';
+        document.getElementById('source').textContent = 'خطا در اتصال - قیمت پیش‌فرض';
+        console.error('خطا:', err);
+      }
     }
-    document.getElementById('time').textContent = data.updated_at;
-  } catch(e) {
-    document.getElementById('price').textContent = 'خطا در اتصال - ۱۱۴,۷۶۸ تومان (پیش‌فرض)';
-  }
-}
-updateNow();
-setInterval(updateNow, 300000); // هر ۱۵ ثانیه
-</script>
-</body></html>`;
+
+    // اولین بار و هر ۱۵ ثانیه
+    updateNow();
+    setInterval(updateNow, 15000);
+  </script>
+</body>
+</html>
