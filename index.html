@@ -1,66 +1,44 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>قیمت تتر به تومان</title>
-  <style>
-    body {
-      font-family: Tahoma, Arial, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
-      text-align: center;
-      padding: 50px;
-    }
-    .price {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #22c55e;
-      margin: 30px 0;
-    }
-    .loading {
-      color: #94a3b8;
-    }
-    button {
-      padding: 12px 24px;
-      font-size: 1.1rem;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قیمت تتر به تومان - ضدقطعی</title>
+<style>
+  body{font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#0f0c29,#30304b);color:#e2e8f0;text-align:center;padding:50px;margin:0;}
+  .box{background:rgba(255,255,255,0.05);border-radius:16px;padding:30px;max-width:500px;margin:20px auto;box-shadow:0 10px 30px rgba(0,0,0,0.5);}
+  .price{font-size:4.5rem;font-weight:bold;color:#22c55e;margin:20px 0;}
+  .source{color:#94a3b8;font-size:1rem;margin:15px 0;}
+  .fallback{color:#f59e0b;font-size:0.9rem;}
+  button{padding:12px 30px;background:#3b82f6;color:white;border:none;border-radius:50px;font-size:1.1rem;cursor:pointer;margin-top:20px;}
+  button:hover{background:#2563eb;}
+</style>
 </head>
 <body>
+<div class="box">
   <h1>قیمت لحظه‌ای تتر (USDT)</h1>
-  <div id="result" class="loading">در حال بارگذاری...</div>
+  <div id="price" class="price">در حال بارگذاری...</div>
+  <div id="source" class="source"></div>
+  <div id="fallback" class="fallback"></div>
   <p>آخرین بروزرسانی: <span id="time">-</span></p>
+  <button onclick="updateNow()">بروزرسانی دستی</button>
+</div>
 
-  <script>
-    async function updatePrice() {
-      try {
-        const res = await fetch('/price');
-        const data = await res.json();
-
-        const tetherPriceUSD = parseFloat(data.tether_price_usd);
-        const tomanRate = parseFloat(data.toman_per_dollar) || 62000; // نرخ پیش‌فرض
-
-        const tomanPrice = tetherPriceUSD * tomanRate;
-        
-        document.getElementById('result').innerHTML = 
-          `${tomanPrice.toLocaleString('fa-IR')} <span style="font-size:2rem">تومان</span>`;
-        
-        document.getElementById('time').textContent = new Date().toLocaleString('fa-IR');
-      } catch (err) {
-        document.getElementById('result').textContent = 'خطا در دریافت قیمت';
-        console.error(err);
-      }
-    }
-
-    // هر ۱۰ ثانیه بروزرسانی کن (یا می‌تونی از WebSocket هم استفاده کنی)
-    updatePrice();
-    setInterval(updatePrice, 10000);
-  </script>
-</body>
-</html>
+<script>
+async function updateNow() {
+  document.getElementById('price').textContent = 'در حال دریافت...';
+  try {
+    const res = await fetch('/price?t=' + Date.now());
+    const data = await res.json();
+    const p = data.tether_price_toman;
+    document.getElementById('price').innerHTML = p.toLocaleString('fa-IR') + ' <small style="font-size:2rem">تومان</small>';
+    document.getElementById('source').textContent = 'منبع: ' + data.source;
+    document.getElementById('fallback').textContent = data.fallback_used > 0 ? 'از منبع جایگزین استفاده شد (' + data.fallback_used + ')' : 'منبع اصلی فعال است';
+    document.getElementById('time').textContent = new Date().toLocaleString('fa-IR');
+  } catch(e) {
+    document.getElementById('price').textContent = 'خطا در اتصال';
+  }
+}
+updateNow();
+setInterval(updateNow, 12000); // هر ۱۲ ثانیه
+</script>
+</body></html>`;
