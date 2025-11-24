@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>قیمت تتر به تومان</title>
+  <style>
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      text-align: center;
+      padding: 50px;
+    }
+    .price {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #22c55e;
+      margin: 30px 0;
+    }
+    .loading {
+      color: #94a3b8;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>قیمت لحظه‌ای تتر (USDT)</h1>
+  <div id="result" class="loading">در حال بارگذاری...</div>
+  <p>آخرین بروزرسانی: <span id="time">-</span></p>
+
+  <script>
+    async function updatePrice() {
+      try {
+        const res = await fetch('/price');
+        const data = await res.json();
+
+        const tetherPriceUSD = parseFloat(data.tether_price_usd);
+        const tomanRate = parseFloat(data.toman_per_dollar) || 62000; // نرخ پیش‌فرض
+
+        const tomanPrice = tetherPriceUSD * tomanRate;
+        
+        document.getElementById('result').innerHTML = 
+          `${tomanPrice.toLocaleString('fa-IR')} <span style="font-size:2rem">تومان</span>`;
+        
+        document.getElementById('time').textContent = new Date().toLocaleString('fa-IR');
+      } catch (err) {
+        document.getElementById('result').textContent = 'خطا در دریافت قیمت';
+        console.error(err);
+      }
+    }
+
+    // هر ۱۰ ثانیه بروزرسانی کن (یا می‌تونی از WebSocket هم استفاده کنی)
+    updatePrice();
+    setInterval(updatePrice, 10000);
+  </script>
+</body>
+</html>
