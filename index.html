@@ -100,15 +100,20 @@
   </div>
 
   <script>
+    const workerUrl = 'https://tetercheng.click4tell.workers.dev/price';  // URL کامل Worker
+
     async function updateNow() {
       document.getElementById('price').innerHTML = 'در حال دریافت...';
       document.getElementById('price').className = 'price loading';
       
       try {
-        const res = await fetch('/price?' + Date.now()); // کش مرورگر رو دور بزن
+        const res = await fetch(workerUrl + '?' + Date.now());  // کش مرورگر رو دور بزن
+        
+        if (!res.ok) throw new Error('پاسخ Worker نامعتبر');
+        
         const data = await res.json();
 
-        const price = data.tether_price_toman || 114768;
+        const price = data.tether_price_toman || 114000;
         
         document.getElementById('price').innerHTML = 
           price.toLocaleString('fa-IR') + 
@@ -128,15 +133,16 @@
         document.getElementById('time').textContent = new Date().toLocaleString('fa-IR');
         
       } catch (err) {
-        document.getElementById('price').innerHTML = '114,768 <span class="toman">تومان</span>';
-        document.getElementById('source').textContent = 'خطا در اتصال - قیمت پیش‌فرض';
+        document.getElementById('price').innerHTML = '114,000 <span class="toman">تومان</span>';
+        document.getElementById('source').textContent = 'خطا در اتصال به Worker - قیمت پیش‌فرض';
+        document.getElementById('price').className = 'price';
         console.error('خطا:', err);
       }
     }
 
     // اولین بار و هر ۱۵ ثانیه
     updateNow();
-    setInterval(updateNow, 15000);
+    setInterval(updateNow, 600000);
   </script>
 </body>
 </html>
